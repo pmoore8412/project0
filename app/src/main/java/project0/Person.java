@@ -22,7 +22,7 @@ public class Person implements Comparable<Person> {
 
     public String toString() {
 
-        return this.firstName + " " + isMiddle() + " " + this.address.toString() + " " + displayPhoneNumber();
+        return this.firstName + " " + isMiddle() + ", " + this.address.toString() + ", " + displayPhoneNumber();
 
     }
 

@@ -11,6 +11,7 @@ public class Phonebook {
     public static ArrayList<Person> phonebook = new ArrayList<>();
     public static Scanner input = new Scanner(System.in);
     public static Scanner stringInput = new Scanner(System.in);
+    public static Scanner yahNah = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -34,7 +35,7 @@ public class Phonebook {
 
         System.out.println("Program incompleate");
 
-    }
+    } // end main
 
     public static void welcomeMessage() {
 
@@ -42,7 +43,7 @@ public class Phonebook {
         System.out.println("");
         System.out.println("");
 
-    }
+    } // end welcome
 
     public static void listChoices() {
 
@@ -56,38 +57,37 @@ public class Phonebook {
         System.out.println("6: display all contacts");
         System.out.println("0: to end");
 
-    }
+    } // end choice list
 
     public static void actionOptions(int choice, Scanner input) {
 
         switch (choice) {
-            case 1:
+            case 1: // add entry
                 addEntry();
                 break;
-            case 2:
+            case 2: // remove entry
                 removeEntry();
-                //System.out.println("Here will be a method to remove an entry");
                 break;
-            case 3:
-                System.out.println("Here will be a method to update an entry");
+            case 3: // update entry
+                updateEntry();
                 break;
-            case 4:
-                System.out.println("Here will be a method to search for an entry by first name");
+            case 4: // search by first name
+                searchByFirst();
                 break;
-            case 5:
-                System.out.println("Here will be a method to search for an entry by last name");
+            case 5: // search by last name
+                searchByLast();
                 break;
-            case 6:
-                System.out.println("Here will be a method to display contacts");
+            case 6: // list all
+                listEntries();
                 break;
             case 0:
                 System.out.println("Program terminated");
                 break;
             default:
                 System.out.println("invalid input, please try again");
-        }
+        } // end switch
 
-    }
+    } // end options
 
     public static void addEntry() {
 
@@ -96,7 +96,7 @@ public class Phonebook {
         //Scanner stringInput = new Scanner(System.in);
 
         System.out.println("Please enter the the record you would like to add to the phone book in the follwoing format: ");
-		System.out.println("First Name Last Name, Street address, City, State, Zip code, Phone Number:");
+		System.out.println("First Name Last Name, Street address, City, State, Zip code, Phone Number");
         entry = stringInput.nextLine();
 
         String[] temp = entry.split(", ");
@@ -126,7 +126,7 @@ public class Phonebook {
         System.out.println(phonebook.get(phonebook.size() - 1));
         System.out.println("Has been successfully added to the phone book");
 
-    }
+    } // end add
 
     public static void removeEntry() {
 
@@ -145,15 +145,194 @@ public class Phonebook {
             lookUp = stringInput.nextLine();
 
             for(Person p : phonebook)
-                if (p.getPhoneNumber().equals(lookUp))
+                if (p.getPhoneNumber().equals(lookUp)) {
                     index = phonebook.indexOf(p);
-                    System.out.println(phonebook.get(index) + "Has been removed");
+                    System.out.println(phonebook.get(index) + " Has been removed"); 
+                }
 
             phonebook.remove(index);
         }
 
 
-    }
+    } // end remove
+
+    public static void updateEntry() {
+
+        String lookUp;
+        String yesNo;
+        Person updatePerson = new Person();
+        Address updateAddress = new Address();
+        String[] tempP = new String[4];
+        String[] tempA = new String[4];
+        int index = 0;
+
+        if (phonebook.isEmpty()) {
+            System.out.println("No entries to update.");
+            System.out.println("Please and an entry before trying to remove one.");
+        }
+        else {
+            System.out.println("Enter the phone number of the entry you wish to update in the following format:");
+            System.out.println("0123456789");
+
+            lookUp = stringInput.nextLine();
+
+            for(Person p : phonebook)
+                if(p.getPhoneNumber().equals(lookUp))
+                    index = phonebook.indexOf(p);
+
+            System.out.println(phonebook.get(index));
+
+            updatePerson = phonebook.get(index);
+            updateAddress = updatePerson.getAddress();
+
+            tempP[0] = updatePerson.getFirstName();
+            tempP[1] = updatePerson.getMidName();
+            tempP[2] = updatePerson.getLastName();
+            tempP[3] = updatePerson.getPhoneNumber();
+
+            tempA[0] = updateAddress.getStreet();
+            tempA[1] = updateAddress.getCity();
+            tempA[2] = updateAddress.getState();
+            tempA[3] = updateAddress.getZip();
+
+            System.out.println("Would you like to change the First Name (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new first name");
+                tempP[0] = stringInput.nextLine();
+                updatePerson.setFirstName(tempP[0]);
+            }
+
+            System.out.println("Would you like to change the Middle Name (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new middle name");
+                tempP[1] = stringInput.nextLine();
+                updatePerson.setMidName(tempP[1]);
+            }
+
+            System.out.println("Would you like to change the Last Name (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new last name");
+                tempP[2] = stringInput.nextLine();
+                updatePerson.setLastName(tempP[2]);
+            }
+
+            System.out.println("Would you like to change the phone number (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new phone number");
+                tempP[3] = stringInput.nextLine();
+                updatePerson.setPhoneNumber(tempP[3]);
+            }
+
+            System.out.println("Would you like to change the street address (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new street address");
+                tempA[0] = stringInput.nextLine();
+                updateAddress.setStreet(tempA[0]);
+            }
+
+            System.out.println("Would you like to change the city (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new city");
+                tempA[1] = stringInput.nextLine();
+                updateAddress.setCity(tempA[1]);
+            }
+
+            System.out.println("Would you like to change the state (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the new state");
+                tempA[2] = stringInput.nextLine();
+                updateAddress.setState(tempA[2]);
+            }
+
+            System.out.println("Would you like to change the zip code (y/n)");
+            yesNo = yahNah.nextLine();
+            if (yesNo.equals("y") || yesNo.equals("Y")) {
+                System.out.println("Please enter the street address");
+                tempA[3] = stringInput.nextLine();
+                updateAddress.setZip(tempA[3]);
+            }
+
+            updatePerson.setAddress(updateAddress);
+
+            phonebook.set(index, updatePerson);
+
+            System.out.println("the entry at index " + index + " has been successfully updated");
+            System.out.println(phonebook.get(index));
+
+        }
+
+
+    } // end update
+
+    public static void searchByFirst() {
+
+        String first;
+        int index = 0;
+
+        if (phonebook.isEmpty())
+            System.out.println("No entries found. Please add an entry first.");
+        else {
+
+            System.out.println("Please enter in the first name of the contact you are looking for:");
+            first = stringInput.nextLine();
+
+            System.out.println("Here is the list of your contacts with the first name of " + first + ":");
+            System.out.println("");
+
+            for(Person p : phonebook)
+                if(p.getFirstName().equals(first)) {
+                    index = phonebook.indexOf(p);
+                    System.out.println(phonebook.get(index));
+                }
+
+        }
+
+    } // end search by first name
+
+    public static void searchByLast() {
+
+        String last;
+        int index = 0;
+
+        if (phonebook.isEmpty())
+            System.out.println("No entries found. Please add an entry first.");
+        else {
+
+            System.out.println("Please enter in the first name of the contact you are looking for:");
+            last = stringInput.nextLine();
+
+            System.out.println("Here is the list of your contacts with the first name of " + last + ":");
+            System.out.println("");
+
+            for(Person p : phonebook)
+                if(p.getLastName().equals(last)) {
+                    index = phonebook.indexOf(p);
+                    System.out.println(phonebook.get(index));
+                }
+
+        }
+
+    } // end search by last name
+
+    public static void listEntries() {
+
+        if (phonebook.isEmpty())
+            System.out.println("No entries found. Please add an entry first.");
+        else {
+            System.out.println("Here is the list of your contacts:");
+            System.out.println("");
+            phonebook.forEach(Person -> System.out.println(Person));
+        }
+
+
+    } // end list entries
 
     public Object getGreeting() {
         return null;
