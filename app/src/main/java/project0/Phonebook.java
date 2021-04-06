@@ -56,6 +56,8 @@ public class Phonebook {
             }
         }
 
+        System.out.println("");
+
         welcomeMessage();
 
         while (killswitch == false) {
@@ -73,15 +75,11 @@ public class Phonebook {
         stringInput.close();
         yahNah.close();
 
-
-        System.out.println("Program incompleate");
-
     } // end main
 
     public static void welcomeMessage() {
 
-        System.out.println("Welcome to your personal digital Roladex Phonebook");
-        System.out.println("");
+        System.out.println("Welcome to your personal digital Rolodex Phonebook");
         System.out.println("");
 
     } // end welcome
@@ -90,9 +88,9 @@ public class Phonebook {
 
         System.out.println("Here is the list of options you can chose from: ");
         System.out.println("");
-        System.out.println("1: add a new entry into the roladex");
-        System.out.println("2: remove an entry");
-        System.out.println("3: update an entry");
+        System.out.println("1: add a new contact into the rolodex");
+        System.out.println("2: remove an contact");
+        System.out.println("3: update an contact");
         System.out.println("4: search by first name");
         System.out.println("5: search by last name");
         System.out.println("6: display all contacts");
@@ -136,7 +134,7 @@ public class Phonebook {
         String splitName;
         //Scanner stringInput = new Scanner(System.in);
 
-        System.out.println("Please enter the the record you would like to add to the phone book in the follwoing format: ");
+        System.out.println("Please enter the the contact information you would like to add to the phone book in the follwoing format: ");
 		System.out.println("First Name Last Name, Street address, City, State, Zip code, Phone Number");
         entry = stringInput.nextLine();
 
@@ -184,7 +182,7 @@ public class Phonebook {
         }
 
         System.out.println("");
-        System.out.println("The entry: ");
+        System.out.println("The contact: ");
         System.out.println(phonebook.get(phonebook.size() - 1));
         System.out.println("Has been successfully added to the phone book");
 
@@ -197,11 +195,11 @@ public class Phonebook {
         //Scanner toRemove = new Scanner(System.in);
 
         if (phonebook.isEmpty()) {
-            System.out.println("No entries to remove. You have removed them all or none are added.");
-            System.out.println("Please and an entry before trying to remove one.");
+            System.out.println("No contacts to remove. You have removed them all or none are added.");
+            System.out.println("Please and a contact before trying to remove one.");
         }
         else {
-            System.out.println("Inter the phone number of the entry you wish to remove in the following format:");
+            System.out.println("Enter the phone number of the contact you wish to remove in the following format:");
             System.out.println("0123456789");
 
             lookUp = stringInput.nextLine();
@@ -253,11 +251,11 @@ public class Phonebook {
         int index = 0;
 
         if (phonebook.isEmpty()) {
-            System.out.println("No entries to update.");
-            System.out.println("Please and an entry before trying to remove one.");
+            System.out.println("No contacts to update.");
+            System.out.println("Please and a contact before trying to remove one.");
         }
         else {
-            System.out.println("Enter the phone number of the entry you wish to update in the following format:");
+            System.out.println("Enter the phone number of the contact you wish to update in the following format:");
             System.out.println("0123456789");
 
             lookUp = stringInput.nextLine();
@@ -370,9 +368,7 @@ public class Phonebook {
                 }
             }
 
-
-            System.out.println("the entry at index " + index + " has been successfully updated");
-            System.out.println(phonebook.get(index));
+            System.out.println("the contact at index " + index + " has been successfully updated");
 
         }
 
@@ -385,7 +381,7 @@ public class Phonebook {
         int index = 0;
 
         if (phonebook.isEmpty())
-            System.out.println("No entries found. Please add an entry first.");
+            System.out.println("No contacts found. Please add a contact first.");
         else {
 
             System.out.println("Please enter in the first name of the contact you are looking for:");
@@ -410,13 +406,13 @@ public class Phonebook {
         int index = 0;
 
         if (phonebook.isEmpty())
-            System.out.println("No entries found. Please add an entry first.");
+            System.out.println("No contacts found. Please add a contact first.");
         else {
 
-            System.out.println("Please enter in the first name of the contact you are looking for:");
+            System.out.println("Please enter in the last name of the contact you are looking for:");
             last = stringInput.nextLine();
 
-            System.out.println("Here is the list of your contacts with the first name of " + last + ":");
+            System.out.println("Here is the list of your contacts with the last name of " + last + ":");
             System.out.println("");
 
             for(Person p : phonebook)
