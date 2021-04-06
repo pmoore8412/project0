@@ -3,6 +3,12 @@
  */
 package project0;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,11 +18,43 @@ public class Phonebook {
     public static Scanner input = new Scanner(System.in);
     public static Scanner stringInput = new Scanner(System.in);
     public static Scanner yahNah = new Scanner(System.in);
+    public static Connection conn;
 
     public static void main(String[] args) {
 
         boolean killswitch = false;
         int choice;
+        Person contact;
+
+        try {
+
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/rolodex", "rolodex", "D3@dp00!");
+            Statement stm = conn.createStatement();
+            String selectSQL = "select * from contacts";
+            ResultSet rst = stm.executeQuery(selectSQL);
+    
+            while(rst.next()) {
+                Address contactAddress = new Address(rst.getString("street"), rst.getString("city"), rst.getString("state_name"), rst.getString("zip"));
+                if (rst.getString("middle_name").equals("null"))
+                    contact = new Person(rst.getString("phone"), rst.getString("first_name"), null, rst.getString("last_name"), contactAddress);
+                else
+                    contact = new Person(rst.getString("phone"), rst.getString("first_name"), rst.getString("middle_name"), rst.getString("last_name"), contactAddress);
+    
+                phonebook.add(contact);
+           } // end while
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load contacts.");
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Well this was embarrassing");
+            }
+        }
 
         welcomeMessage();
 
@@ -32,6 +70,9 @@ public class Phonebook {
         }
 
         input.close();
+        stringInput.close();
+        yahNah.close();
+
 
         System.out.println("Program incompleate");
 
@@ -121,6 +162,27 @@ public class Phonebook {
 
         phonebook.add(tempPerson);
 
+        String insertSQL = "insert into contacts (phone, first_name, middle_name, last_name, street, city, state_name, zip) values ('"+ temp[5] + "', '" + temp2[0] + 
+        "', '" + midName + "', '" + temp2[temp2.length - 1] + "', '" + temp[1] + "', '" + temp[2] + "', '" + temp[3] + "', '" + temp[4] + "'); commit;";
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/rolodex", "rolodex", "D3@dp00!");
+            conn.setAutoCommit(false);
+            PreparedStatement ps = conn.prepareStatement(insertSQL);
+            ps.execute();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to add contact to database.");
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Well this was embarrassing");
+            }
+        }
+
         System.out.println("");
         System.out.println("The entry: ");
         System.out.println(phonebook.get(phonebook.size() - 1));
@@ -149,8 +211,31 @@ public class Phonebook {
                     index = phonebook.indexOf(p);
                     System.out.println(phonebook.get(index) + " Has been removed"); 
                 }
-
+            
             phonebook.remove(index);
+            
+            String removeSQL = "delete from contacts where phone = '" + lookUp +"'; commit;";
+            try {
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/rolodex", "rolodex", "D3@dp00!");
+                conn.setAutoCommit(false);
+                PreparedStatement ps = conn.prepareStatement(removeSQL);
+                ps.execute();
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Failed to remove contact from database.");
+            }
+            finally {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.out.println("Well this was embarrassing");
+                }
+            }
+            
+
+            
         }
 
 
@@ -160,6 +245,7 @@ public class Phonebook {
 
         String lookUp;
         String yesNo;
+        PreparedStatement ps;
         Person updatePerson = new Person();
         Address updateAddress = new Address();
         String[] tempP = new String[4];
@@ -262,6 +348,28 @@ public class Phonebook {
             updatePerson.setAddress(updateAddress);
 
             phonebook.set(index, updatePerson);
+
+            String updateSQL = "update contacts set phone = '" + tempP[3] +"', first_name = '" + tempP[0] + "', middle_name = '" + tempP[1] + "', last_name = '" + tempP[2] +
+            "', street = '" + tempA[0] + "', city = '" + tempA[1] + "', state_name = '" + tempA[2] + "', zip = '" + tempA[3] + "' where phone = '" + lookUp + "'; commit;";
+            try {
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/rolodex", "rolodex", "D3@dp00!");
+                conn.setAutoCommit(false);
+                ps = conn.prepareStatement(updateSQL);
+                ps.execute();
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Failed to update contact.");
+            }
+            finally {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.out.println("Well this was embarrassing");
+                }
+            }
+
 
             System.out.println("the entry at index " + index + " has been successfully updated");
             System.out.println(phonebook.get(index));

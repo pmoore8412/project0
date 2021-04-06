@@ -12,8 +12,8 @@ plugins {
 }
 
 repositories {
-    // Use JCenter for resolving dependencies.
-    jcenter()
+    // Use mavenCentral for resolving dependencies.
+    mavenCentral()
 }
 
 dependencies {
@@ -25,6 +25,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:29.0-jre'
+
+    // This dependency is used for comunication with an external database
+    implementation 'org.postgresql:postgresql:42.2.19.jre7'
 }
 
 application {
